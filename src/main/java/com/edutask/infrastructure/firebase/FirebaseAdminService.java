@@ -10,6 +10,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 @ApplicationScoped
 public class FirebaseAdminService {
@@ -21,7 +23,13 @@ public class FirebaseAdminService {
     public void init() {
         try {
             if (FirebaseApp.getApps().isEmpty()) {
-                FileInputStream serviceAccount = new FileInputStream(serviceAccountPath);
+                String serviceAccountJson = System.getenv("FIREBASE_SERVICE_ACCOUNT_JSON");
+                InputStream serviceAccount;
+                if (serviceAccountJson != null && !serviceAccountJson.isEmpty()) {
+                    serviceAccount = new ByteArrayInputStream(serviceAccountJson.getBytes());
+                } else {
+                    serviceAccount = new FileInputStream(serviceAccountPath);
+                }
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                         .build();
