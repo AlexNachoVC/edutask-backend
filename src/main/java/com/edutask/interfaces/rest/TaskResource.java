@@ -8,7 +8,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/api")
+@Path("/api/lists")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class TaskResource {
@@ -19,14 +19,14 @@ public class TaskResource {
     @Inject DeleteTaskUseCase deleteTaskUseCase;
 
     @GET
-    @Path("/lists/{listId}/tasks")
+    @Path("/{listId}/tasks")
     @RolesAllowed("**")
     public Response getTasks(@PathParam("listId") Long listId) {
         return Response.ok(getTasksUseCase.execute(listId)).build();
     }
 
     @POST
-    @Path("/lists/{listId}/tasks")
+    @Path("/{listId}/tasks")
     @RolesAllowed("**")
     public Response createTask(@PathParam("listId") Long listId, TaskDto dto) {
         var input = new CreateTaskUseCase.Input(
