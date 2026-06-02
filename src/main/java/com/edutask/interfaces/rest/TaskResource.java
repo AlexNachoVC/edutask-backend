@@ -37,9 +37,10 @@ public class TaskResource {
     }
 
     @PUT
-    @Path("/tasks/{id}")
+    @Path("/{listId}/tasks/{id}")
     @RolesAllowed("**")
-    public Response updateTask(@PathParam("id") Long id, TaskDto dto) {
+    public Response updateTask(@PathParam("listId") Long listId,
+                               @PathParam("id") Long id, TaskDto dto) {
         var input = new UpdateTaskUseCase.Input(
                 id, dto.title, dto.description, dto.completed, dto.dueDate, dto.priority
         );
@@ -47,9 +48,10 @@ public class TaskResource {
     }
 
     @DELETE
-    @Path("/tasks/{id}")
+    @Path("/{listId}/tasks/{id}")
     @RolesAllowed("**")
-    public Response deleteTask(@PathParam("id") Long id) {
+    public Response deleteTask(@PathParam("listId") Long listId,
+                               @PathParam("id") Long id) {
         deleteTaskUseCase.execute(id);
         return Response.noContent().build();
     }
